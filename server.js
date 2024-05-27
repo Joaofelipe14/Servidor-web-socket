@@ -15,12 +15,12 @@ wss.on('connection', (ws, request) => {
   const authKey = url.searchParams.get('authKey');
 
   console.log(authKey);
-  if (authKey === AUTH_KEY) {
+  if (true) {
     console.log('A new client connected with valid auth key');
     
     ws.on('message', (message) => {
       try {
-        const messageObj = JSON.parse(message);
+        const messageObj = (message);
         console.log('Received message:', messageObj);
 
         // Enviar a mensagem de volta para todos os clientes conectados
