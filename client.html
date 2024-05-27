@@ -9,20 +9,36 @@
   <div id="messages"></div>
 
   <script>
-    const socket = new WebSocket('ws://localhost:3000');
+    const socket = new WebSocket('wss://https://servidor-web-socket.vercel.app/');
+
+    socket.onopen = () => {
+      console.log('WebSocket connection established.');
+    };
 
     socket.onmessage = async event => {
       const messagesDiv = document.getElementById('messages');
-      const messageText = await event.data.text(); // Obter o conteúdo da mensagem como texto
+      const messageText = await event.data.text();
       messagesDiv.innerHTML += '<p>' + messageText + '</p>';
+    };
+
+    socket.onerror = error => {
+      console.error('WebSocket error:', error);
+    };
+
+    socket.onclose = event => {
+      console.log('WebSocket connection closed:', event);
     };
 
     function sendMessage() {
       const messageInput = document.getElementById('messageInput');
       const message = messageInput.value;
-      console.log(JSON.stringify(message))
-      socket.send(message);
-      messageInput.value = '';
+
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(message);
+        messageInput.value = '';
+      } else {
+        console.error('WebSocket is not open.');
+      }
     }
   </script>
 </body>
